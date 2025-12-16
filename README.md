@@ -11,3 +11,6 @@ I used R-language with help of tidyverse, tidyr, and ggplot2 libraries among oth
 - Having chronic health condition like heart diseases predisposes one to Diabetes.
 - Obese people and high cholestrol levels increases the risk of one getting Diabetes.
 - The KNN algorithm achieved an accuracy score of 81.3% in classification task of Diabetes instances.
+
+# Download and access file
+The download link for the word-knitted file: https://drive.google.com/file/d/1wULZZfYy70YF9jTA2mXouLQHtO0iqwC0/view?usp=sharing
