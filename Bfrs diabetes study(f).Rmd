@@ -1,0 +1,252 @@
+---
+title: "BFRS biabetes"
+output: word_document
+date: "2024-04-01"
+---
+
+```{r}
+suppressPackageStartupMessages(library(tidyverse))
+library(haven)
+library(readxl)
+```
+
+```{r}
+t_dataset<-read_csv("C:/Users/FeLoH/Desktop/projects/bfrss/BRFSS2015(categorical).csv",n_max = Inf, show_col_types = FALSE,skip = 0, col_names = TRUE)
+cat(paste("BFRS Dataset has total columns of",ncol(t_dataset),"and total rows of",nrow(t_dataset)))
+```
+
+```{r}
+head(tibble(t_dataset))
+names(t_dataset)
+summary(t_dataset)
+# checking on missing values in rows
+cat(paste("the original dataset has total missing values of: ",sum(is.na(t_dataset))))
+# accessing duplicated rows
+cat(paste("the original dataset has total duplicates values of: ",sum(duplicated(t_dataset))))
+```
+
+```{r}
+#removing duplicates to maintain unique rows
+BFRS<-distinct(t_dataset)
+cat(paste("the new unique dataset has total duplicates value of: ",sum(duplicated(BFRS))))
+```
+
+```{r}
+ggplot(BFRS,aes(x = Diabetes, fill = General_Health))+
+  geom_bar(position = "dodge")+
+  labs(title = "DIABETES ACCORDING TO General_Health by AGE GROUPS", x = "OUTCOME", y = "counts of Age group ",caption = "Data from BFRS2015")+
+  facet_wrap(~Age_groups)
+```
+
+
+```{r}
+ggplot(BFRS,aes(x = Diabetes, fill = High_bloodpressure))+
+  geom_bar(position = "dodge")+
+  labs(title = "DIABETES ACCORDING TO BLOOD PRESSURE", x = "OUTCOME", y = "counts of blood pressure ",caption = "Data from BFRS2015")+
+  coord_polar()
+```
+
+```{r}
+ggplot(BFRS,aes(x = Diabetes, y = BMI))+
+  geom_jitter(position = "jitter")+
+  labs(title = "DIABETES ACCORDING TO BMI", x = "OUTCOME", y = "counts of BMI ",caption = "Data from BFRS2015")
+```
+
+```{r}
+ggplot(BFRS,aes(x = Diabetes, fill = High_cholestrol))+
+  geom_bar(position = "dodge")+
+  labs(title = "DIABETES ACCORDING TO  CHOLESTROL", x = "OUTCOME", y = "counts of cholestrol ",caption = "Data from BFRS2015")
+```
+
+```{r}
+ggplot(BFRS,aes(x = Diabetes, fill = Stroke))+
+  geom_bar(position = "dodge")+
+  labs(title = "DIABETES ACCORDING TO  STROKE", x = "OUTCOME", y = "counts of stroke",caption = "Data from BFRS2015")
+```
+
+```{r}
+ggplot(BFRS,aes(x = Diabetes, fill = Smoking100_cigarettes))+
+  geom_bar(position = "dodge")+
+  labs(title = "DIABETES ACCORDING TO  SMOKING ",subtitle = "100 cigarettes in lifetime", x = "OUTCOME", y = "counts of Smoking100_cigarettes ",caption = "Data from BFRS2015")
+```
+
+```{r}
+ggplot(BFRS,aes(x = Diabetes, fill = Education_level))+
+  geom_bar(position = "dodge")+
+  labs(title = "DIABETES ACCORDING TO  Education level ", x = "OUTCOME", y = "Education level ",caption = "Data from BFRS2015")+
+  facet_grid(Heavy_inAlcohol~Income_dollar)
+```
+
+```{r}
+## RECODING VARIABLE INTO NUMERIC DATA TYPE
+outcome<- recode(BFRS$Diabetes, "no"= 0, "yes" = 1, missing = NULL)
+hbp<- recode(BFRS$High_bloodpressure, "no"= 0, "yes" = 1, missing =
+ NULL)
+h_cholestrol<-recode(BFRS$High_cholestrol, "high cholestrol" = 1, "no high cholestrol" = 0, missing = NULL)
+chol_chk<- recode(BFRS$Cholestrol_check, "cholestrol check(in 5yrs)" = 1, "no cholestrol check(in 5yrs)" = 0, missing = NULL)
+smoking<- recode(BFRS$Smoking100_cigarettes, "no"= 0, "yes" = 1, missing = NULL)
+stroke<- recode(BFRS$Stroke, "no"= 0, "yes" = 1, missing = NULL)
+fruit<- recode(BFRS$Fruits_consumption, "not daily"= 0, "daily" = 1, missing = NULL)
+veges<- recode(BFRS$Veggies_consumption, "not daily"= 0, "daily" = 1, missing = NULL)
+heartdisease<- recode(BFRS$Heart_disease, "no"= 0, "yes" = 1, missing = NULL)
+phy_act<- recode(BFRS$PhysActivity_in30days, "no"= 0, "yes" = 1, missing = NULL)
+alcohol<- recode(BFRS$Heavy_inAlcohol, "no"= 0, "yes" = 1, missing = NULL)
+healthcover<- recode(BFRS$HealthCover, "no"= 0, "yes" = 1, missing = NULL)
+diffwalking<- recode(BFRS$Difficult_walking, "no"= 0, "yes" = 1, missing = NULL)
+nodoccost<- recode(BFRS$NoDoc_cost_1yr, "no"= 0, "yes" = 1, missing = NULL)
+genhlth<- recode(BFRS$General_Health, "execellent"= 4, "good" = 2, "very good" = 3, "fair"= 1, "poor" = 0, missing = NULL)
+age<-recode(BFRS$Age_groups,"18-24yrs"=0,"25-29yrs"=1,"30-34yrs"=2,"35-39yrs"=3,"40-44yrs"=4,"45-49yrs"=5,"50-54yrs"=6,"55-59yrs"=7,"60-64yrs"=8,"65-69yrs"=9,"70-74yrs"=10,"75-79yrs"=11,"80yrs+"=12,missing = NULL)
+education<- recode(BFRS$Education_level,"college graduate"=5,"technical college"=4,"some high school"=2,"never or kindergarten"=0,"high school graduate"=3,"Elementary"=1,missing = NULL)
+income<- recode(BFRS$Income_dollar,"<10000"=1,"10000-15000"=2,"15000-20000"=3,"20000-25000"=4, "25000-35000"=5, "35000-50000"=6,"50000-75000"=7, "75000+"=8,missing = NULL)
+
+```
+
+```{r}
+#CORRELATION TEST
+suppressPackageStartupMessages(library(Hmisc))
+suppressPackageStartupMessages(library(corrplot))
+```
+
+```{r}
+mydata<-tibble(outcome,hbp,h_cholestrol,chol_chk,smoking,stroke,fruit,veges,heartdisease,phy_act,alcohol,healthcover,diffwalking,nodoccost,genhlth,age,education,income,BFRS$BMI,BFRS$Mental_Health,BFRS$Physical_health)
+head(mydata)
+summary(mydata)
+```
+
+```{r}
+(cormtr<-rcorr(as.matrix(mydata)))
+```
+
+```{r}
+corrplot(cor(mydata),method = "number",type = "full",title = "CORRELATION MATRIX")
+```
+
+```{r}
+corrplot(cor(mydata),type = "full",order = "AOE",p.mat = cormtr$p,sig.level = 0.01,insig = "blank",title = "Correlation and significance levels",method = "square")
+```
+
+```{r}
+# we convert independent variables to a factor to indicate that they should be treated as a categorical variable. 
+mydata$hbp <- factor(mydata$hbp)
+mydata$h_cholestrol <- factor(mydata$h_cholestrol)
+mydata$chol_chk <- factor(mydata$chol_chk)
+mydata$smoking <- factor(mydata$smoking)
+mydata$stroke <- factor(mydata$stroke)
+mydata$fruit <- factor(mydata$fruit)
+mydata$veges <- factor(mydata$veges)
+mydata$heartdisease <- factor(mydata$heartdisease)
+mydata$phy_act <- factor(mydata$phy_act)
+mydata$alcohol <- factor(mydata$alcohol)
+mydata$healthcover<-factor(mydata$healthcover)
+mydata$diffwalking <- factor(mydata$diffwalking)
+mydata$nodoccost<-factor(mydata$nodoccost)
+mydata$genhlth<-factor(mydata$genhlth)
+mydata$age<-factor(mydata$age)
+mydata$education<-factor(mydata$education)
+mydata$income<-factor(mydata$income)
+```
+
+
+```{r}
+#Multiple logistic Regression function
+#Logistic regression, also called a logit model, is used to model dichotomous outcome variables(0,1). In the logit model the log odds of the outcome is modeled as a linear combination of the predictor variables.
+m_regr<-glm(outcome~hbp+h_cholestrol+chol_chk+smoking+stroke+fruit+veges+heartdisease+phy_act+alcohol+healthcover+diffwalking+nodoccost+genhlth+age+education+income+BFRS$BMI+BFRS$Mental_Health+BFRS$Physical_health,family = binomial(link="logit"),data = mydata)
+summary(m_regr)
+```
+
+```{r}
+# assessing performance of the logit model
+Null_deviance<-193356  #on 222254  degrees of freedom, it tells us how the response variable can be predicted by a model with only an intercept term.
+Residual_deviance<-156377  #on 222210  degrees of freedom, tells how a model can predict the response variable with p predictor variables.
+
+#using the chi square test
+p<-222254-222210 # degree of freedom
+chi_square<-Null_deviance - Residual_deviance
+cat("calculated chisquare value is",chi_square, "with predictor variables degree of freedom of",p,"\n\nDECISION \nsince calculated value is > than tabulated value = 55.758 at 5% with degree of freedom of",p,"hence we reject the null hypothesis","\n\nCONCLUSION \nWe conclude that the Logit Model is highly useful in predicting the probability that a given individual is diabetic.")
+
+```
+
+
+```{r}
+#MULTICOLLINEARITY
+#using check_collinearity in the Performance package to test for multicollinearity in the glm model.
+library(performance)
+suppressWarnings(check_collinearity(m_regr))
+cat(paste("there is no presence of multicollinearity between the predictor variables since the VIF is less than 4, thus no high correlation between independent variables"))
+#multicollinearity tend to lower the significance of the variable thus it is good to check for its presence.
+```
+
+
+```{r}
+#K-NEAREST NEIGHBORS CLASSIFICATION
+suppressPackageStartupMessages(library(e1071))#svm
+suppressPackageStartupMessages(library(caTools))#splitting data
+suppressPackageStartupMessages(library(class))#KNN 
+suppressPackageStartupMessages(library(pROC))
+```
+
+```{r}
+#converting dataset variables back to numeric values
+mydata$hbp <- as.numeric(mydata$hbp)
+mydata$h_cholestrol <- as.numeric(mydata$h_cholestrol)
+mydata$chol_chk <- as.numeric(mydata$chol_chk)
+mydata$smoking <- as.numeric(mydata$smoking)
+mydata$stroke <- as.numeric(mydata$stroke)
+mydata$fruit <- as.numeric(mydata$fruit)
+mydata$veges <- as.numeric(mydata$veges)
+mydata$heartdisease <- as.numeric(mydata$heartdisease)
+mydata$phy_act <- as.numeric(mydata$phy_act)
+mydata$alcohol <- as.numeric(mydata$alcohol)
+mydata$healthcover<-as.numeric(mydata$healthcover)
+mydata$diffwalking <- as.numeric(mydata$diffwalking)
+mydata$nodoccost<-as.numeric(mydata$nodoccost)
+mydata$genhlth<-as.numeric(mydata$genhlth)
+mydata$age<-as.numeric(mydata$age)
+mydata$education<-as.numeric(mydata$education)
+mydata$income<-as.numeric(mydata$income)
+myset<-tibble(outcome,hbp,h_cholestrol,chol_chk,smoking,stroke,fruit,veges,heartdisease,phy_act,alcohol,healthcover,diffwalking,nodoccost,genhlth,age,education,income,BFRS$BMI,BFRS$Mental_Health,BFRS$Physical_health)
+head(myset)
+```
+
+
+```{r}
+#data split into train and test and applying the scaling feature
+set.seed(255)
+split<-sample.split(mydata$outcome,SplitRatio = 0.75)
+train_set<-subset(mydata,split == TRUE)
+test_set<-subset(mydata,split == FALSE)
+#scaling transformation on predictors
+scaletrainset<-scale(train_set[-1])
+scaletestset<-scale(test_set[-1])
+```
+
+
+```{r}
+#knn model
+knn_classifier<-knn(train = scaletrainset,test = scaletestset, cl = train_set$outcome,k = 3)
+real<-test_set$outcome
+(confusion_matrix<-table(knn_classifier,real))
+accuracy_score<-(43157+2054)/(43157+2054+6680+3673)
+#accuracy score = (true +ve + true -ve)/(true +ve + true -ve + false +ve + false -ve)
+cat(paste("KNN has an accuracy score of:",accuracy_score*100,"%"))
+# precision = true +ve /(true +ve = false +ve)
+precision_score<-(2054/(2054+6680))
+cat(paste("KNN has a precision score of:",precision_score))
+# ROC-AUC SCORE
+roc_s=roc(knn_classifier,real)
+roc_auc=auc(roc_s)
+cat(paste('KNN AUC SCORE:',roc_auc))
+```
+
+
+```{r}
+suppressPackageStartupMessages(library(gmodels))
+CrossTable(y=knn_classifier,x=real,prop.chisq = FALSE)
+```
+
+
+```{r}
+#Methodology attained in the study include
+cat("\n EDA\n1.Data importation into R interface\n2.Data cleaning i.e removing duplicates and discarding missing values\n3.Data visualization in ggplot to unveil underlying patterns\n4.Data recoding to Numeric for continouse variables and factors to be recognized as categorical variables\n\nSTATISTICAL TESTS\n1.Pearson correlation test<- to assess the degree of association of the predictors with the response variable\n2.Wald test<-to assess the significance of the predictor variables in the study.\n3.Multiple Logistic regression<-collaborating all significant predictor variables into the logistic regression.\n4.VIF Test<-assessing the presence of Multicollinearity problem in the study.\n5.Chi-square test<- to assess the performance of the logit model in predicting cases of diabetes in an individual.\n\n MACHINE LEARNING MODEL\n1.KNN Classifier<-Supervised ML algorithm for classification task using perfomance metrics such as Accuracy Score and Confusion Matrix.")
+```
+
