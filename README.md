@@ -1,5 +1,7 @@
 # CORRELATIONAL-STUDY-ON-VARIOUS-RISK-FACTORS-TO-DIABETES-PREVALENCE-USING-R_STUDIO
+
 A correlational design whereby the key interest is to put into consideration the degree of association between the predictor variables and response variable Diabetes to study the disease prevalence under given circumstances of interaction with the predictor variables.
+
 # Abstract
 Diabetes is a condition associated with high blood sugar (glucose) levels. There are two categories namely; Type 1 Diabetes that is prevalent among children while, Type 2 Diabetes that is prevalent among adults.
 
@@ -8,9 +10,11 @@ I used secondary research data to acquire Behavioural Risk Factor Surveillance S
 I used R-language with help of tidyverse, tidyr, and ggplot2 libraries among others to facilitate the EDA process and coming up with insights through statistical tests like; Pearson-correlation test, wald_test for significance and applying ML models for prediction of Diabetes instances.
 
 # Conclusion
+
 - Having chronic health condition like heart diseases predisposes one to Diabetes.
 - Obese people and high cholestrol levels increases the risk of one getting Diabetes.
 - The KNN algorithm achieved an accuracy score of 81.3% in classification task of Diabetes instances.
 
 # Download and access file
+
 The download link for the word-knitted file: https://drive.google.com/file/d/1wULZZfYy70YF9jTA2mXouLQHtO0iqwC0/view?usp=sharing
